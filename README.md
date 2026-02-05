@@ -39,3 +39,14 @@ Depuis la racine du repo :
 ### 1) Déployer
 ```bash
 make up
+
+## Demo
+
+### Lancer (build + import + deploy)
+make up
+
+### Exposer le service (local)
+kubectl port-forward svc/nginx-custom 8081:80
+
+### Tester
+curl -s http://127.0.0.1:8081 | head -n 5
