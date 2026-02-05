@@ -1,0 +1,15 @@
+- name: Deploy custom Nginx to K3d
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  tasks:
+    - name: Apply Deployment
+      command: kubectl apply -f k8s/deployment.yml
+
+    - name: Apply Service
+      command: kubectl apply -f k8s/service.yml
+
+    - name: Wait for rollout
+      command: kubectl rollout status deployment/nginx-custom --timeout=120s
+      changed_when: false
