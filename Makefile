@@ -11,12 +11,13 @@ PORT    ?= 8081
 
 cluster:
 > if k3d cluster list | awk 'NR>1 {print $$1}' | grep -qx "$(CLUSTER)"; then
->   echo "✅ Cluster $(CLUSTER) déjà existant"
+>   echo "Cluster $(CLUSTER) already exists"
 > else
->   echo "🚀 Création du cluster $(CLUSTER)"
+>   echo "Creating cluster $(CLUSTER)"
 >   k3d cluster create $(CLUSTER) --servers 1 --agents 2
 > fi
-> k3d kubeconfig merge $(CLUSTER) --kubeconfig-switch-context
+> k3d kubeconfig merge $(CLUSTER) --kubeconfig-switch-context --overwrite
+> kubectl config use-context k3d-$(CLUSTER) >/dev/null 2>&1 || true
 > kubectl get nodes
 
 build:
@@ -30,20 +31,19 @@ deploy:
 > ansible-playbook -i ansible/inventory.ini ansible/deploy.yml
 
 up: cluster build import deploy
-> echo "✅ OK. Lance 'make url' pour exposer l'app."
+> echo "OK. Run 'make url' to expose the service."
 
 url:
-> # stop old port-forward
-> if [ -f /tmp/nginx_pf.pid ]; then kill $$(cat /tmp/nginx_pf.pid) >/dev/null 2>&1 || true; rm -f /tmp/nginx_pf.pid; fi
-> > pkill -f 'kubectl port-forward svc/nginx-cus[t]om' || true
+> pkill -f "kubectl port-forward.*nginx-custom" || true
 > nohup kubectl port-forward svc/nginx-custom $(PORT):80 >/tmp/nginx.log 2>&1 & echo $$! > /tmp/nginx_pf.pid
-> echo "➡️ Onglet PORTS : mets le port $(PORT) en Public, puis ouvre l’URL."
+> echo "Port-forward started on localhost:$(PORT)."
 
 status:
 > kubectl get deploy,po,svc -o wide
 
 clean:
-> if [ -f /tmp/nginx_pf.pid ]; then kill $$(cat /tmp/nginx_pf.pid) >/dev/null 2>&1 || true; rm -f /tmp/nginx_pf.pid; fi
+> pkill -f "kubectl port-forward.*nginx-custom" || true
+> rm -f /tmp/nginx_pf.pid
 > kubectl delete -f k8s/service.yml --ignore-not-found
 > kubectl delete -f k8s/deployment.yml --ignore-not-found
 
