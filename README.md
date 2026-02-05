@@ -7,11 +7,11 @@ Industrialiser un mini cycle de vie applicatif :
 2. **Import** de cette image dans un cluster **Kubernetes local K3d** (1 server / 2 agents)
 3. **Déploiement** sur le cluster via **Ansible** (kubectl apply + rollout status)
 
-✅ Résultat : une page web servie par Nginx depuis Kubernetes.
+Résultat : une page web servie par Nginx depuis Kubernetes.
 
 ---
 
-## Pré-requis
+## Pré-requias
 - Docker
 - Packer
 - k3d (k3s)
