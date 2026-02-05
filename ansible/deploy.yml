@@ -3,13 +3,22 @@
   connection: local
   gather_facts: false
 
+  vars:
+    project_root: "{{ playbook_dir }}/.."
+
   tasks:
     - name: Apply Deployment
       command: kubectl apply -f k8s/deployment.yml
+      args:
+        chdir: "{{ project_root }}"
 
     - name: Apply Service
       command: kubectl apply -f k8s/service.yml
+      args:
+        chdir: "{{ project_root }}"
 
     - name: Wait for rollout
       command: kubectl rollout status deployment/nginx-custom --timeout=120s
+      args:
+        chdir: "{{ project_root }}"
       changed_when: false
