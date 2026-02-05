@@ -34,7 +34,7 @@ up: cluster build import deploy
 > echo "OK. Run 'make url' to expose the service."
 
 url:
-> pkill -f "kubectl port-forward.*nginx-custom" || true
+> pkill -f "kubectl port-forward.*nginx-custom" >/dev/null 2>&1 || true
 > nohup kubectl port-forward svc/nginx-custom $(PORT):80 >/tmp/nginx.log 2>&1 & echo $$! > /tmp/nginx_pf.pid
 > echo "Port-forward started on localhost:$(PORT)."
 
@@ -42,8 +42,8 @@ status:
 > kubectl get deploy,po,svc -o wide
 
 clean:
-> pkill -f "kubectl port-forward.*nginx-custom" || true
-> rm -f /tmp/nginx_pf.pid
+> if [ -f /tmp/nginx_pf.pid ]; then kill $$(cat /tmp/nginx_pf.pid) >/dev/null 2>&1 || true; rm -f /tmp/nginx_pf.pid; fi
+> pkill -f "kubectl port-forward.*nginx-custom" >/dev/null 2>&1 || true
 > kubectl delete -f k8s/service.yml --ignore-not-found
 > kubectl delete -f k8s/deployment.yml --ignore-not-found
 
