@@ -1,5 +1,170 @@
 <!doctype html>
 <html lang="fr">
-  <head><meta charset="utf-8"><title>TP</title></head>
-  <body>Blablabla Moustapha</body>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>C’est Mous — Nginx Custom</title>
+  <style>
+    :root{
+      --bg1:#0b0f16;
+      --bg2:#111827;
+      --card:#0f172a;
+      --line:rgba(255,255,255,.10);
+      --text:rgba(255,255,255,.90);
+      --muted:rgba(255,255,255,.65);
+      --gold:#d6bfa5;
+      --gold2:#f2e9da;
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(900px 500px at 20% 15%, rgba(214,191,165,.25), transparent 60%),
+        radial-gradient(900px 500px at 80% 85%, rgba(242,233,218,.18), transparent 60%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+    }
+    .wrap{ width:min(980px, 92vw); padding:28px; }
+    .card{
+      position:relative;
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(15,23,42,.92), rgba(15,23,42,.75));
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(600px 200px at 30% 0%, rgba(214,191,165,.28), transparent 60%),
+        radial-gradient(500px 180px at 80% 100%, rgba(242,233,218,.18), transparent 55%);
+      pointer-events:none;
+      filter: blur(2px);
+    }
+    header{
+      position:relative;
+      padding: 34px 34px 0 34px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 14px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      color:var(--muted);
+      background: rgba(255,255,255,.04);
+      font-size:14px;
+      white-space:nowrap;
+    }
+    .dot{
+      width:10px;height:10px;border-radius:50%;
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      box-shadow: 0 0 0 6px rgba(214,191,165,.12);
+    }
+    main{ position:relative; padding: 18px 34px 34px 34px; }
+    h1{
+      margin: 16px 0 8px;
+      font-size: clamp(34px, 4vw, 56px);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+    }
+    .accent{
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    p{
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.6;
+      max-width: 62ch;
+    }
+    .grid{
+      margin-top: 22px;
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .kpi{
+      border:1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px 14px 16px;
+      background: rgba(255,255,255,.03);
+    }
+    .kpi b{
+      display:block;
+      font-size: 13px;
+      color: rgba(255,255,255,.60);
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .kpi span{
+      display:block;
+      font-size: 18px;
+      color: rgba(255,255,255,.92);
+      font-weight: 700;
+    }
+    footer{
+      position:relative;
+      padding: 16px 34px 28px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      border-top: 1px solid var(--line);
+      color: rgba(255,255,255,.55);
+      font-size: 13px;
+      flex-wrap:wrap;
+    }
+    @media (max-width: 820px){
+      .grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <section class="card">
+      <header>
+        <div class="badge"><span class="dot"></span> Packer → K3d → Kubernetes → Ansible</div>
+        <div class="badge">custom-nginx:1.0 • nginx-custom</div>
+      </header>
+
+      <main>
+        <h1>C’est <span class="accent">Mous</span>.</h1>
+        <p>
+          Image Nginx personnalisée construite avec Packer, importée dans K3d,
+          puis déployée sur Kubernetes via Ansible. Reproductible en une commande.
+        </p>
+
+        <div class="grid">
+          <div class="kpi"><b>Statut</b><span>Running ✅</span></div>
+          <div class="kpi"><b>Service</b><span>nginx-custom</span></div>
+          <div class="kpi"><b>Port</b><span>80/tcp</span></div>
+        </div>
+      </main>
+
+      <footer>
+        <span>© Mous — Image to Cluster</span>
+        <span>Build • Import • Deploy • Expose</span>
+      </footer>
+    </section>
+  </div>
+</body>
 </html>
